@@ -10,7 +10,6 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "my-gdx-game";
 		cfg.useGL30 = false;
-
 		cfg.width = 800;
 		cfg.height = 480;
 		new LwjglApplication(new MyGame(), cfg);
