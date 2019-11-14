@@ -14,43 +14,70 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.project.game.entities.Player;
 
 public class Play implements Screen {
-	
+
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
-	
-	
-	private Player player;
+	private float mapWidth, mapHeight, viewWidth = Gdx.graphics.getWidth(), viewHeight = Gdx.graphics.getHeight();
 
-	
+	private Player player;
 
 	@Override
 	public void show() {
 		TmxMapLoader loader = new TmxMapLoader();
-		map = loader.load("maps/map.tmx");
+		map = loader.load("maps/new-map.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map);
-		
+
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, viewWidth, viewHeight);
 		camera.update();
-		
-		player = new Player(new Sprite(new Texture("images/TreeSmall.png")), (TiledMapTileLayer) map.getLayers().get(0));
-		
-		//player.setPosition(11 * player.getCollisionLayer().getTileWidth(), (player.getCollisionLayer().getHeight() - 14) * player.getCollisionLayer().getTileHeight());
+
+		player = new Player(new Sprite(new Texture("images/TreeSmall.png")),
+				(TiledMapTileLayer) map.getLayers().get(0));
+
+		// player.setPosition(11 * player.getCollisionLayer().getTileWidth(),
+		// (player.getCollisionLayer().getHeight() - 14) *
+		// player.getCollisionLayer().getTileHeight());
+
+		System.out.println(player.getCollisionLayer().getWidth());
+		System.out.println(player.getCollisionLayer().getHeight());
+		System.out.println(player.getCollisionLayer().getTileWidth());
+		System.out.println(player.getCollisionLayer().getTileHeight());
+		System.out.println(Gdx.graphics.getHeight());
+
+		mapWidth = player.getCollisionLayer().getWidth() * player.getCollisionLayer().getTileWidth();
+		mapHeight = player.getCollisionLayer().getHeight() * player.getCollisionLayer().getTileHeight();
+
+		player.setPosition(0, mapHeight - player.getHeight());
+		camera.position.set(mapHeight / 2, mapWidth / 2, 0);
+		camera.update();
 
 		Gdx.input.setInputProcessor(player);
 
-		
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0 , 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		float plPosX = player.getX() + player.getWidth() / 2, plPosY = player.getY() + player.getHeight() / 2;
+		
+		// Camera move right or left:
+		if (plPosX >= viewWidth / 2 && plPosX <= mapWidth - (viewWidth / 2) ) {
+			camera.position.x = plPosX;
+		}
+		
+		// Camera move up or down:
+		if(plPosY <= mapHeight - (viewHeight / 2)
+				&& plPosY >= viewHeight / 2) {
+			camera.position.y = plPosY;
+		}
+
+		camera.update();
 		renderer.setView(camera);
 		renderer.render();
-		
+
 		renderer.getBatch().begin();
 		player.draw(renderer.getBatch());
 		renderer.getBatch().end();

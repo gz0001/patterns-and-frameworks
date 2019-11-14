@@ -17,12 +17,12 @@ public class Player extends Sprite implements InputProcessor {
 
 	private float speed = 60 * 2, increment;
 
-
 	private TiledMapTileLayer collisionLayer;
 
 	public Player(Sprite sprite, TiledMapTileLayer collisionLayer) {
 		super(sprite);
 		this.collisionLayer = collisionLayer;
+
 	}
 
 	public TiledMapTileLayer getCollisionLayer() {
@@ -42,7 +42,8 @@ public class Player extends Sprite implements InputProcessor {
 	private void update(float deltaTime) {
 
 		float oldX = getX(), oldY = getY(), tileWidth = collisionLayer.getTileWidth(),
-				titleHeight = collisionLayer.getTileHeight();
+				titleHeight = collisionLayer.getTileHeight(), mapWidth = collisionLayer.getWidth() * tileWidth,
+				mapHeight = collisionLayer.getHeight() * titleHeight;
 		boolean collisionX = false, collisionY = false;
 
 		setX(getX() + velocity.x * deltaTime);
@@ -55,9 +56,9 @@ public class Player extends Sprite implements InputProcessor {
 			collisionX = collidesLeft();
 		else if (velocity.x > 0) // going right
 			collisionX = collidesRight();
-
-		// react to x collision
-		if (collisionX) {
+		
+		// react to x collision or out of map
+		if (collisionX || getX() < 0 || getX() > mapWidth - getWidth()) {
 			setX(oldX);
 			velocity.x = 0;
 		}
@@ -72,21 +73,19 @@ public class Player extends Sprite implements InputProcessor {
 			collisionY = collidesBottom();
 		else if (velocity.y > 0) // going up
 			collisionY = collidesTop();
-
+		
 		// react to y collision
-		if (collisionY) {
+		if (collisionY || getY() < 0 || getY() > mapHeight - getHeight()) {
 			setY(oldY);
 			velocity.y = 0;
 		}
-				
-		//System.out.println(collisionY + ":" + collisionX);
-		
+
 	}
 
 	private boolean isCellBlocked(float x, float y) {
 		Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()),
 				(int) (y / collisionLayer.getTileHeight()));
-		//System.out.println("Cell: " + cell.getTile().getId());
+		// System.out.println("Cell: " + cell.getTile().getId());
 		return cell != null && cell.getTile() != null && cell.getTile().getId() == 248;
 	}
 
@@ -127,16 +126,14 @@ public class Player extends Sprite implements InputProcessor {
 			break;
 		case Keys.S:
 			velocity.y -= speed;
-			break;	
+			break;
 		case Keys.A:
 			velocity.x -= speed;
 			break;
 		case Keys.D:
 			velocity.x += speed;
-		default:
-			System.out.println("default: " + keycode);
+
 		}
-		System.out.println("typed: " + velocity.x);
 		return true;
 	}
 
@@ -148,8 +145,8 @@ public class Player extends Sprite implements InputProcessor {
 			velocity.x = 0;
 		case Keys.W:
 		case Keys.S:
-			velocity.y = 0;	
-			
+			velocity.y = 0;
+
 		}
 		return true;
 	}
@@ -182,6 +179,18 @@ public class Player extends Sprite implements InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return false;
+	}
+
+	@Override
+	public float getX() {
+		// TODO Auto-generated method stub
+		return super.getX();
+	}
+
+	@Override
+	public float getY() {
+		// TODO Auto-generated method stub
+		return super.getY();
 	}
 
 }
