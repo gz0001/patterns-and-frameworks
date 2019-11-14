@@ -15,7 +15,7 @@ public class Player extends Sprite implements InputProcessor {
 
 	private Vector2 velocity = new Vector2();
 
-	private float speed = 60 * 2, increment;
+	private float speed = 100 * 2, increment;
 
 	private TiledMapTileLayer collisionLayer;
 

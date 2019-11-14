@@ -34,16 +34,7 @@ public class Play implements Screen {
 
 		player = new Player(new Sprite(new Texture("images/TreeSmall.png")),
 				(TiledMapTileLayer) map.getLayers().get(0));
-
-		// player.setPosition(11 * player.getCollisionLayer().getTileWidth(),
-		// (player.getCollisionLayer().getHeight() - 14) *
-		// player.getCollisionLayer().getTileHeight());
-
-		System.out.println(player.getCollisionLayer().getWidth());
-		System.out.println(player.getCollisionLayer().getHeight());
-		System.out.println(player.getCollisionLayer().getTileWidth());
-		System.out.println(player.getCollisionLayer().getTileHeight());
-		System.out.println(Gdx.graphics.getHeight());
+	
 
 		mapWidth = player.getCollisionLayer().getWidth() * player.getCollisionLayer().getTileWidth();
 		mapHeight = player.getCollisionLayer().getHeight() * player.getCollisionLayer().getTileHeight();
@@ -86,9 +77,7 @@ public class Play implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		camera.viewportWidth = width;
-		camera.viewportHeight = height;
-		camera.update();
+		
 	}
 
 	@Override
