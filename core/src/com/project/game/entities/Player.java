@@ -1,7 +1,5 @@
 package com.project.game.entities;
 
-import java.awt.print.Printable;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -15,7 +13,7 @@ public class Player extends Sprite implements InputProcessor {
 
 	private Vector2 velocity = new Vector2();
 
-	private float speed = 100 * 2, increment;
+	private float speed = 200 * 2, increment;
 
 	private TiledMapTileLayer collisionLayer;
 
