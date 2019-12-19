@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -87,41 +88,35 @@ public class PathFinding {
 	}
 
 	private ArrayList<Vector2> restructurePath(ArrayList<Node> nodes) {
+		ArrayList<Vector2> result = new ArrayList<Vector2>();
+		Vector2 current = nodes.get(nodes.size() - 1).point, start = nodes.get(0).point;
 
-		ArrayList<Vector2> points = new ArrayList<Vector2>(), paths = new ArrayList<Vector2>(),
-				open = new ArrayList<Vector2>();
+		while (current.dst(start) != 0.0f) {
+			ArrayList<Node> adjs = new ArrayList<Node>();
 
-		for (Node node : nodes) {
-			points.add(node.point);
-		}
-
-		Vector2 end = points.get(points.size() - 1);
-
-		open.add(points.get(0));
-
-		while (!open.isEmpty()) {
-
-			Vector2 current = open.get(0);
-			open.remove(0);
-			paths.add(current);
-
-			if (current.dst(end) == 0)
-				break;
-
-			ArrayList<Vector2> adjacents = getAdjacents(current), currentAdj = new ArrayList<Vector2>();
-			System.out.println("adj: " + adjacents);
-			for (Vector2 adjacent : adjacents) {
-				System.out.println(adjacent);
-				Optional<Vector2> point = paths.stream().filter(v -> v.dst(adjacent) == 0).findFirst();
-				System.out.println("poin: ");
+			for (Node node : nodes) {
+				if (Math.abs(current.x - node.point.x) < 2 && Math.abs(current.y - node.point.y) < 2) {
+					adjs.add(node);
+				}
 			}
-			// System.out.println(currentAdj);
+
+			ArrayList<Node> sortedAdjs = (ArrayList<Node>) adjs.stream()
+					.sorted((n1, n2) -> new Float(n1.g).compareTo(new Float(n2.g))).collect(Collectors.toList());
+			
+			System.out.println("curent: " + current.toString());
+			for (Node node : sortedAdjs) {
+				System.out.println("--sorted restr: " + node.toString());
+
+			}
+			Node next = sortedAdjs.get(0);
+			current = next.point;
+
 		}
 
 		return null;
 	}
 
-	public ArrayList<Node> findPath(Vector2 start, Vector2 end) {
+	public ArrayList<Vector2> findPath(Vector2 start, Vector2 end) {
 
 		ArrayList<Node> open = new ArrayList<Node>(), close = new ArrayList<Node>();
 
@@ -171,17 +166,14 @@ public class PathFinding {
 		for (int i = close.size() - 1; i > 0; i--) {
 			Node cur = close.get(i), prev = close.get(i - 1);
 			if (Math.abs(cur.point.x - prev.point.x) > 1 || Math.abs(cur.point.y - prev.point.y) > 1) {
-				// close.remove(i - 1);
+				close.remove(i - 1);
 			}
 		}
 
 		System.out.println("Path founded !");
-		ArrayList<Vector2> paths = restructurePath(close);
-		for (Node node : close) {
-			// System.out.println(node.toString());
-		}
+		ArrayList<Vector2> paths = (ArrayList<Vector2>) close.stream().map(n -> n.point).collect(Collectors.toList());;
 
-		return close;
+		return paths;
 
 	}
 

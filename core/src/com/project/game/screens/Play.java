@@ -34,16 +34,15 @@ public class Play implements Screen {
 		camera.setToOrtho(false, viewWidth, viewHeight);
 		camera.update();
 
-		player = new Player(new Sprite(new Texture("images/wizard.png")),
-				(TiledMapTileLayer) map.getLayers().get(0));
+		player = new Player(new Sprite(new Texture("images/wizard.png")), (TiledMapTileLayer) map.getLayers().get(0));
 
-		npc = new NPC(new Sprite(new Texture("images/wizard.png")), (TiledMapTileLayer) map.getLayers().get(0));
+		npc = new NPC(new Sprite(new Texture("images/wizard.png")), (TiledMapTileLayer) map.getLayers().get(0), player);
 
 		mapWidth = player.getCollisionLayer().getWidth() * player.getCollisionLayer().getTileWidth();
 		mapHeight = player.getCollisionLayer().getHeight() * player.getCollisionLayer().getTileHeight();
 
 		player.setPosition(0, mapHeight - player.getHeight());
-		npc.setPosition(16 * 5, mapHeight - npc.getHeight());
+		npc.setPosition(16 * 15, mapHeight - npc.getHeight() - 16 * 8);
 		camera.position.set(mapHeight / 2, mapWidth / 2, 0);
 		camera.update();
 
@@ -59,11 +58,28 @@ public class Play implements Screen {
 		float plPosX = player.getX() + player.getWidth() / 2, plPosY = player.getY() + player.getHeight() / 2;
 
 		// Camera move right or left:
+		if (plPosX < viewWidth / 2) {
+			camera.position.x = viewWidth / 2;
+		}
+
+		if (plPosX > mapWidth - (viewWidth / 2)) {
+			camera.position.x = mapWidth - (viewWidth / 2);
+		}
+
 		if (plPosX >= viewWidth / 2 && plPosX <= mapWidth - (viewWidth / 2)) {
 			camera.position.x = plPosX;
 		}
 
 		// Camera move up or down:
+		if (plPosY > mapHeight - (viewHeight / 2)) {
+			camera.position.y = mapHeight - (viewHeight / 2);
+		}
+		
+		if (plPosY < viewHeight / 2) {
+			camera.position.y = viewHeight / 2;
+		}
+		
+		
 		if (plPosY <= mapHeight - (viewHeight / 2) && plPosY >= viewHeight / 2) {
 			camera.position.y = plPosY;
 		}

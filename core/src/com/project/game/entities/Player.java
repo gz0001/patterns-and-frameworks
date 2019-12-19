@@ -86,6 +86,10 @@ public class Player extends Sprite implements InputProcessor {
 		// System.out.println("Cell: " + cell.getTile().getId());
 		return cell != null && cell.getTile() != null && cell.getTile().getId() == 248;
 	}
+	
+	public Vector2 getPosition() {
+		return new Vector2(getX(), getY());
+	}
 
 	public boolean collidesRight() {
 		for (float step = 0; step <= getHeight(); step += increment)
