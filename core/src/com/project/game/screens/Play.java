@@ -34,15 +34,15 @@ public class Play implements Screen {
 		camera.setToOrtho(false, viewWidth, viewHeight);
 		camera.update();
 
-		player = new Player(new Sprite(new Texture("images/wizard.png")), (TiledMapTileLayer) map.getLayers().get(0));
+		player = new Player(new Sprite(new Texture("images/player1.png")), (TiledMapTileLayer) map.getLayers().get(0));
 
 		npc = new NPC(new Sprite(new Texture("images/wizard.png")), (TiledMapTileLayer) map.getLayers().get(0), player);
 
 		mapWidth = player.getCollisionLayer().getWidth() * player.getCollisionLayer().getTileWidth();
 		mapHeight = player.getCollisionLayer().getHeight() * player.getCollisionLayer().getTileHeight();
 
-		player.setPosition(0, mapHeight - player.getHeight());
-		npc.setPosition(16 * 15, mapHeight - npc.getHeight() - 16 * 8);
+		player.setPosition(16 * 5, mapHeight - player.getHeight());
+		npc.setPosition(16 * 20, mapHeight - npc.getHeight() - 16 * 25);
 		camera.position.set(mapHeight / 2, mapWidth / 2, 0);
 		camera.update();
 

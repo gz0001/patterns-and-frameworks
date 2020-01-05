@@ -1,5 +1,7 @@
 package com.project.game.entities;
 
+import java.io.ObjectInputStream.GetField;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -7,13 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Sprite implements InputProcessor {
 
 	private Vector2 velocity = new Vector2();
 
-	private float speed = 200 * 2, increment;
+	private float speed = 100, increment;
 
 	private TiledMapTileLayer collisionLayer;
 
@@ -194,5 +197,6 @@ public class Player extends Sprite implements InputProcessor {
 		// TODO Auto-generated method stub
 		return super.getY();
 	}
+	
 
 }

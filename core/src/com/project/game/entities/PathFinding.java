@@ -40,7 +40,7 @@ public class PathFinding {
 			for (int j = -1; j <= 1; j++) {
 				int curY = y + j;
 				// System.out.println("x: " + curX + " cury: " + curY);
-				if (curX > -1 && curY > -1 && curX < tileLayer.getWidth() - 1 && curY < tileLayer.getHeight() - 1) {
+				if (curX > -1 && curY > -1 && curX < tileLayer.getWidth() && curY < tileLayer.getHeight()) {
 
 					if (curX != x || curY != y) {
 						Vector2 adjacent = new Vector2(curX, curY);
@@ -117,7 +117,7 @@ public class PathFinding {
 	}
 
 	public ArrayList<Vector2> findPath(Vector2 start, Vector2 end) {
-
+		System.out.println(end);
 		ArrayList<Node> open = new ArrayList<Node>(), close = new ArrayList<Node>();
 
 		Node first = new Node(start);
@@ -128,6 +128,7 @@ public class PathFinding {
 			int minIndex = open.indexOf(Collections.min(open));
 
 			Node current = open.get(minIndex);
+			//System.out.println(current.point);
 
 			open.remove(minIndex);
 			close.add(current);
@@ -137,6 +138,9 @@ public class PathFinding {
 			}
 
 			ArrayList<Vector2> adjacents = getAdjacents(current.point);
+			if (current.point.x == 0 && current.point.y == 48) {
+				System.out.println(adjacents);
+			}
 			for (Vector2 v : adjacents) {
 				if (inList(v, close) > -1)
 					continue;
@@ -170,7 +174,6 @@ public class PathFinding {
 			}
 		}
 
-		System.out.println("Path founded !");
 		ArrayList<Vector2> paths = (ArrayList<Vector2>) close.stream().map(n -> n.point).collect(Collectors.toList());;
 
 		return paths;
